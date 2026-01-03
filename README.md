@@ -7,9 +7,17 @@ A demo ASP.NET Core 9 application built with Clean Architecture for managing ord
 
 ## Features
 
-- User authentication with JWT
-- Order creating and tracking
-- EF Core with SQL Server
+- Order processing and tracking
+
+## Architecture
+
+- Clean Architecture with dependency inversion
+
+## Tech Stack
+
+- ASP.NET Core 9
+- EF Core 9
+- SQL Server
 
 ## Getting Started
 
