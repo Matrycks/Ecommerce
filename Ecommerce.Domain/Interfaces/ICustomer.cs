@@ -8,9 +8,9 @@ namespace Ecommerce.Domain.Interfaces
     public interface ICustomer
     {
         public int CustomerId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string Email { get; }
+        public string Password { get; }
     }
 }

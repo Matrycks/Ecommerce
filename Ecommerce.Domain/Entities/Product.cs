@@ -9,7 +9,23 @@ namespace Ecommerce.Domain.Entities
     public class Product : IProduct
     {
         public int ProductId { get; set; }
-        public string Name { get; set; } = null!;
-        public decimal Price { get; set; }
+        public string Name { get; private set; } = null!;
+        public string? Desc { get; private set; }
+        public decimal Price { get; private set; }
+
+        public Product(string name, string? desc, decimal price)
+        {
+            if (string.IsNullOrEmpty(name) || price <= 0) throw new Exception("Invalid params for creating product");
+
+            Name = name;
+            Desc = desc;
+            Price = price;
+        }
+
+        public void SetPrice(decimal newPrice)
+        {
+            if (newPrice <= 0) throw new Exception("Product pricing must be greater than 0");
+            Price = newPrice;
+        }
     }
 }

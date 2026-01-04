@@ -8,7 +8,8 @@ namespace Ecommerce.Domain.Interfaces
     public interface IProduct
     {
         public int ProductId { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
+        public string Name { get; }
+        public decimal Price { get; }
+        public string? Desc { get; }
     }
 }
