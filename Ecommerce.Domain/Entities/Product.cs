@@ -13,6 +13,8 @@ namespace Ecommerce.Domain.Entities
         public string? Desc { get; private set; }
         public decimal Price { get; private set; }
 
+        public Product() { }
+
         public Product(string name, string? desc, decimal price)
         {
             if (string.IsNullOrEmpty(name) || price <= 0) throw new Exception("Invalid params for creating product");

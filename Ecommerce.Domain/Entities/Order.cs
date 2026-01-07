@@ -18,13 +18,15 @@ namespace Ecommerce.Domain.Entities
         public OrderStatus Status { get; private set; }
         public DateTime CreatedDate { get; set; }
 
-        public Order(int customerId, Guid orderNumber)
+        public Order(int customerId, Guid orderNumber, ICollection<IOrderItem> orderItems)
         {
             if (customerId <= 0) throw new Exception("Invalid customerId");
+            if (orderItems.Count <= 0) throw new Exception("Orders cannot be created without items");
 
             CustomerId = customerId;
             OrderNumber = orderNumber;
             CreatedDate = DateTime.Now.ToUniversalTime();
+            Items = orderItems;
         }
 
         public void SetStatus(OrderStatus newStatus)
