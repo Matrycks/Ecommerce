@@ -9,9 +9,9 @@ namespace Ecommerce.Application.Products
 {
     public class GetProduct
     {
-        private readonly IProductRepository _products;
+        private readonly IRepository<Product> _products;
 
-        public GetProduct(IProductRepository products)
+        public GetProduct(IRepository<Product> products)
         {
             _products = products;
         }

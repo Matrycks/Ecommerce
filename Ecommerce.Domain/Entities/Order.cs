@@ -32,44 +32,17 @@ namespace Ecommerce.Domain.Entities
         public void SetStatus(OrderStatus newStatus)
         {
             if (IsPaid) throw new Exception("Order is paid, status cannot be changed");
+
+            if (newStatus == OrderStatus.Paid) IsPaid = true;
+
             Status = newStatus;
-        }
-
-        public void AddItem(IOrderItem item)
-        {
-            if (IsPaid) throw new Exception("Order is paid and cannot be changed");
-            if (Items.Contains(item)) return;
-
-            Items.Add(item);
-
-            decimal itemTotal = item.Cost * item.Quantity;
-            SetTotal(Total + itemTotal);
-        }
-
-        public void RemoveItem(IOrderItem item)
-        {
-            if (IsPaid) throw new Exception("Order is paid and cannot be changed");
-
-            Items.Remove(item);
-
-            decimal itemTotal = item.Cost * item.Quantity;
-            SetTotal(Total - itemTotal);
-        }
-
-        public void SetTotal(decimal total)
-        {
-            Total = total;
-        }
-
-        public void UpdateOrderItemQuantity(int productId, int quantity)
-        {
-            OrderItem? orderItem = (OrderItem?)Items.SingleOrDefault(x => x.ProductId == productId)
-                ?? throw new Exception("No item found with productId");
-            orderItem.UpdateQuantity(quantity);
         }
 
         public void Cancel()
         {
+            if (Status == OrderStatus.Shipped || Status == OrderStatus.Delivered)
+                throw new Exception("Order delivered and cannot be cancelled");
+
             Status = OrderStatus.Cancelled;
         }
     }

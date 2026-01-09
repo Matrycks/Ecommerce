@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ecommerce.Application.Dtos;
 using Ecommerce.Application.Products;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers
@@ -37,11 +39,12 @@ namespace Ecommerce.API.Controllers
 
                     _logger.LogInformation("GetProducts succeeded");
 
-                    return Ok(products);
+                    return Ok(products.Adapt<List<ProductDto>>());
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Retrieving products failed");
+
                     return BadRequest("Retrieving products failed");
                 }
             }

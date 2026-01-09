@@ -25,6 +25,12 @@ namespace Ecommerce.Infrastructure.Repositories
             return product;
         }
 
+        public Product Add(Product entity)
+        {
+            _dbContext.Products.Add(entity);
+            return entity;
+        }
+
         public IEnumerable<Product> GetAll()
         {
             List<Product> products = _dbContext.Products.ToList();
@@ -35,6 +41,11 @@ namespace Ecommerce.Infrastructure.Repositories
         {
             var products = _dbContext.Products.Where(predicate);
             return products;
+        }
+
+        public void SaveChanges()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

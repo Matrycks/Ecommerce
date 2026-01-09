@@ -4,6 +4,7 @@ namespace Ecommerce.Domain
     {
         Pending,
         Confirmed,
+        Paid,
         Cancelled,
         Shipped,
         Delivered

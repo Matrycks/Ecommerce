@@ -16,6 +16,8 @@ namespace Ecommerce.Domain.Entities
         public decimal Total { get; set; }
         public decimal Cost { get; set; }
 
+        public OrderItem() { }
+
         public OrderItem(int productId, int quantity)
         {
             if (quantity <= 0)
@@ -25,12 +27,12 @@ namespace Ecommerce.Domain.Entities
             Quantity = quantity;
         }
 
-        public void UpdateQuantity(int quantity)
+        public OrderItem(ICartItem cartItem)
         {
-            if (quantity <= 0)
-                throw new ArgumentException("Quantity must be greater than zero.");
-
-            Quantity = quantity;
+            ProductId = cartItem.ProductId;
+            Quantity = cartItem.Quantity;
+            Cost = cartItem.Cost;
+            Total = cartItem.Total;
         }
     }
 }

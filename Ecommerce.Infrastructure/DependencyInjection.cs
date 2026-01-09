@@ -25,6 +25,7 @@ namespace Ecommerce.Infrastructure
                 services.AddDbContext<EcommerceDbContext>(options => options.UseSqlServer(connectionName));
 
             services.AddScoped<IRepository<Product>, ProductRepository>();
+            services.AddScoped<IRepository<Cart>, CartRepository>();
 
             return services;
         }
