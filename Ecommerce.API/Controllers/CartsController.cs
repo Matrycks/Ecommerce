@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers
 {
+    /// <summary>
+    /// Manages cart and cart items.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class CartsController : ControllerBase
@@ -19,6 +22,14 @@ namespace Ecommerce.API.Controllers
         private readonly AddCartItem _addCartItem;
         private readonly RemoveCartItem _removeCartItem;
 
+        /// <summary>
+        /// Manages cart and cart items.
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="createCart"></param>
+        /// <param name="getCart"></param>
+        /// <param name="addCartItem"></param>
+        /// <param name="removeCartItem"></param>
         public CartsController(ILogger<CartsController> logger, CreateCart createCart,
             GetCart getCart, AddCartItem addCartItem, RemoveCartItem removeCartItem)
         {
@@ -29,6 +40,11 @@ namespace Ecommerce.API.Controllers
             _removeCartItem = removeCartItem;
         }
 
+        /// <summary>
+        /// Creates a new cart.
+        /// </summary>
+        /// <param name="createCartRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult CreateCart(CreateCartRequest createCartRequest)
         {
@@ -59,6 +75,12 @@ namespace Ecommerce.API.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Retrieves an existing cart.
+        /// </summary>
+        /// <param name="cartId"></param>
+        /// <returns></returns>
         [HttpGet("{cartId}")]
         public IActionResult GetCart(int cartId)
         {
@@ -87,6 +109,12 @@ namespace Ecommerce.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds an item to an existing cart.
+        /// </summary>
+        /// <param name="cartId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("{cartId}/Item")]
         public IActionResult AddCartItem(int cartId, AddCartItemRequest request)
         {
@@ -115,6 +143,12 @@ namespace Ecommerce.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Removes an item from existing cart.
+        /// </summary>
+        /// <param name="cartId"></param>
+        /// <param name="cartItemId"></param>
+        /// <returns></returns>
         [HttpDelete("{cartId}/Item/{cartItemId}")]
         public IActionResult RemoveCartItem(int cartId, int cartItemId)
         {

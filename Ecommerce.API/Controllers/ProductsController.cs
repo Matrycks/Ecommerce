@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers
 {
+    /// <summary>
+    /// Manages shopping products.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class ProductsController : ControllerBase
@@ -16,12 +19,21 @@ namespace Ecommerce.API.Controllers
         private readonly ILogger<ProductsController> _logger;
         private readonly GetProducts _getProducts;
 
+        /// <summary>
+        /// Manages shopping products.
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="getProducts"></param>
         public ProductsController(ILogger<ProductsController> logger, GetProducts getProducts)
         {
             _logger = logger;
             _getProducts = getProducts;
         }
 
+        /// <summary>
+        /// Retrieves list of products.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetProducts()
         {
