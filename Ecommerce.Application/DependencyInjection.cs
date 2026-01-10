@@ -13,6 +13,7 @@ namespace Ecommerce.Application
             services.AddScoped<CreateCart>();
             services.AddScoped<GetCart>();
             services.AddScoped<AddCartItem>();
+            services.AddScoped<RemoveCartItem>();
 
             return services;
         }

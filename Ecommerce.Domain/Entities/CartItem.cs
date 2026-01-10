@@ -9,6 +9,7 @@ namespace Ecommerce.Domain.Entities
 {
     public class CartItem
     {
+        public int CartId { get; set; }
         public int CartItemId { get; set; }
         public int ProductId { get; set; }
         public decimal Cost { get; set; }

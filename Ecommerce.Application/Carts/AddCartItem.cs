@@ -14,9 +14,9 @@ namespace Ecommerce.Application.Carts
     public class AddCartItem
     {
         private readonly IRepository<Product> _productRepo;
-        private readonly IRepository<Cart> _cartRepo;
+        private readonly ICartRepository _cartRepo;
 
-        public AddCartItem(IRepository<Product> productRepo, IRepository<Cart> cartRepo)
+        public AddCartItem(IRepository<Product> productRepo, ICartRepository cartRepo)
         {
             _productRepo = productRepo;
             _cartRepo = cartRepo;

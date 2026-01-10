@@ -10,9 +10,9 @@ namespace Ecommerce.Application.Carts
 {
     public class GetCart
     {
-        private readonly IRepository<Cart> _cartRepo;
+        private readonly ICartRepository _cartRepo;
 
-        public GetCart(IRepository<Cart> cartRepo)
+        public GetCart(ICartRepository cartRepo)
         {
             _cartRepo = cartRepo;
         }

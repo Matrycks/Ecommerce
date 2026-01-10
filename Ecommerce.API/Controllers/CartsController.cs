@@ -17,14 +17,16 @@ namespace Ecommerce.API.Controllers
         private readonly CreateCart _createCart;
         private readonly GetCart _getCart;
         private readonly AddCartItem _addCartItem;
+        private readonly RemoveCartItem _removeCartItem;
 
         public CartsController(ILogger<CartsController> logger, CreateCart createCart,
-            GetCart getCart, AddCartItem addCartItem)
+            GetCart getCart, AddCartItem addCartItem, RemoveCartItem removeCartItem)
         {
             _logger = logger;
             _createCart = createCart;
             _getCart = getCart;
             _addCartItem = addCartItem;
+            _removeCartItem = removeCartItem;
         }
 
         [HttpPost]
@@ -85,7 +87,7 @@ namespace Ecommerce.API.Controllers
             }
         }
 
-        [HttpPost("{cartId}/AddItem")]
+        [HttpPost("{cartId}/Item")]
         public IActionResult AddCartItem(int cartId, AddCartItemRequest request)
         {
             string correlationId = HttpContext.TraceIdentifier;
@@ -109,6 +111,35 @@ namespace Ecommerce.API.Controllers
                     _logger.LogError(ex.Message, ex);
 
                     return BadRequest("Error adding cart item");
+                }
+            }
+        }
+
+        [HttpDelete("{cartId}/Item/{cartItemId}")]
+        public IActionResult RemoveCartItem(int cartId, int cartItemId)
+        {
+            string correlationId = HttpContext.TraceIdentifier;
+            using (_logger.BeginScope(new Dictionary<string, object>
+            {
+                ["CorrelationId"] = correlationId
+            }))
+            {
+                try
+                {
+                    _logger.LogInformation("RemoveCartItem called: Cart: {cartId}, Item: {cartItemId}",
+                        cartId, cartItemId);
+
+                    var cart = _removeCartItem.Execute(cartId, cartItemId);
+
+                    _logger.LogInformation("RemoveCartItem succeeded");
+
+                    return Ok(cart.Adapt<CartDto>());
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message, ex);
+
+                    return BadRequest("Error removing item");
                 }
             }
         }

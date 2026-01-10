@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Infrastructure.Repositories
 {
-    public class CartRepository : IRepository<Cart>
+    public class CartRepository : ICartRepository
     {
         private readonly EcommerceDbContext _dbContext;
 
@@ -34,6 +34,16 @@ namespace Ecommerce.Infrastructure.Repositories
         public IEnumerable<Cart> GetAll()
         {
             throw new NotImplementedException();
+        }
+
+        public CartItem? GetCartItem(int cartItemId)
+        {
+            return _dbContext.CartItems.Find(cartItemId);
+        }
+
+        public ICollection<CartItem> GetCartItems(int cartId)
+        {
+            return [.. _dbContext.CartItems.Where(x => x.CartId == cartId)];
         }
 
         public IQueryable<Cart> Query(Expression<Func<Cart, bool>> predicate)
