@@ -11,8 +11,8 @@ namespace Ecommerce.Application
             services.AddScoped<GetProduct>();
             services.AddScoped<GetProducts>();
             services.AddScoped<CreateCart>();
-            services.AddScoped<CreateCartItem>();
             services.AddScoped<GetCart>();
+            services.AddScoped<AddCartItem>();
 
             return services;
         }

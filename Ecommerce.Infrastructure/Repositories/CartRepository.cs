@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
 using Ecommerce.Infrastructure.DatabaseContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Infrastructure.Repositories
 {
@@ -26,7 +27,7 @@ namespace Ecommerce.Infrastructure.Repositories
 
         public Cart? Get(int entityId)
         {
-            var cart = _dbContext.Carts.Find(entityId);
+            var cart = _dbContext.Carts.Include(x => x.Items).SingleOrDefault(x => x.CartId == entityId);
             return cart;
         }
 

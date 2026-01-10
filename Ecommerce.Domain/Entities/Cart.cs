@@ -32,9 +32,13 @@ namespace Ecommerce.Domain.Entities
         public void AddItem(CartItem item)
         {
             if (IsPaid) throw new Exception("Order is paid and cannot be changed");
-            if (Items.Contains(item)) return;
-
-            Items.Add(item);
+            if (Items.Any(x => x.ProductId == item.ProductId))
+            {
+                var existingItem = Items.Single(x => x.ProductId == item.ProductId);
+                existingItem.UpdateQuantity(existingItem.Quantity + item.Quantity);
+            }
+            else
+                Items.Add(item);
 
             SetTotal();
         }
