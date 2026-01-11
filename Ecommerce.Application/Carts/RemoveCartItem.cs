@@ -4,29 +4,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
+using MediatR;
 
 namespace Ecommerce.Application.Carts
 {
-    public class RemoveCartItem
+    public record RemoveCartItemCommand(int CartId, int CartItemId) : IRequest<Cart>;
+    public class RemoveCartItemHandler : IRequestHandler<RemoveCartItemCommand, Cart>
     {
         private readonly ICartRepository _cartRepo;
 
-        public RemoveCartItem(ICartRepository cartRepo)
+        public RemoveCartItemHandler(ICartRepository cartRepo)
         {
             _cartRepo = cartRepo;
         }
 
-        public Cart Execute(int cartId, int cartItemId)
+        public Task<Cart> Handle(RemoveCartItemCommand request, CancellationToken cancellationToken)
         {
-            var cartItem = _cartRepo.GetCartItem(cartItemId)
-                ?? throw new Exception("Cannot remove item, item doesn't exist");
+            var cart = _cartRepo.Get(request.CartId) ?? throw new Exception("Cannot remove item, cart doesn't exist");
 
-            var cart = _cartRepo.Get(cartId) ?? throw new Exception("Cannot remove item, cart doesn't exist");
-            cart.RemoveItem(cartItem);
+            var cartItem = _cartRepo.GetCartItem(request.CartItemId);
+            if (cartItem != null)
+            {
+                cart.RemoveItem(cartItem);
 
-            _cartRepo.SaveChanges();
+                _cartRepo.SaveChanges();
+            }
 
-            return cart;
+            return Task.FromResult(cart);
         }
     }
 }

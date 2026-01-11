@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ecommerce.Application.Dtos;
 using Ecommerce.Application.Products;
 using Mapster;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers
@@ -17,17 +18,17 @@ namespace Ecommerce.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger;
-        private readonly GetProducts _getProducts;
+        private readonly IMediator _mediator;
 
         /// <summary>
         /// Manages shopping products.
         /// </summary>
         /// <param name="logger"></param>
-        /// <param name="getProducts"></param>
-        public ProductsController(ILogger<ProductsController> logger, GetProducts getProducts)
+        /// <param name="mediator"></param>
+        public ProductsController(ILogger<ProductsController> logger, IMediator mediator)
         {
             _logger = logger;
-            _getProducts = getProducts;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Ecommerce.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult GetProducts()
+        public async Task<IActionResult> GetProducts()
         {
             var correlationId = HttpContext.TraceIdentifier;
             using (_logger.BeginScope(new Dictionary<string, object>
@@ -47,7 +48,7 @@ namespace Ecommerce.API.Controllers
                 {
                     _logger.LogInformation("GetProducts request received");
 
-                    var products = _getProducts.Execute();
+                    var products = await _mediator.Send(new GetProductsCommand());
 
                     _logger.LogInformation("GetProducts succeeded");
 

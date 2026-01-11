@@ -1,30 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Ecommerce.Application.Dtos;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
-using Ecommerce.Domain.Entities.Base;
-using Ecommerce.Domain.Interfaces;
+using MediatR;
 
 namespace Ecommerce.Application.Carts
 {
     public record CreateCartRequest(int CustomerId, ICollection<CartItemDto> Items);
-    public record CreateCartCommand(int CustomerId, ICollection<CartItem> Items);
+    public record CreateCartCommand(int CustomerId, ICollection<CartItem> Items) : IRequest<Cart>;
 
-    public class CreateCart
+    public class CreateCartHandler : IRequestHandler<CreateCartCommand, Cart>
     {
         private readonly ICartRepository _cartRepo;
         private readonly IRepository<Product> _productRepo;
 
-        public CreateCart(IRepository<Product> productRepo, ICartRepository cartRepo)
+        public CreateCartHandler(IRepository<Product> productRepo, ICartRepository cartRepo)
         {
             _productRepo = productRepo;
             _cartRepo = cartRepo;
         }
 
-        public Cart Execute(CreateCartCommand command)
+        public Task<Cart> Handle(CreateCartCommand command, CancellationToken cancellationToken)
         {
             var cartItems = new List<CartItem>();
             foreach (var item in command.Items)
@@ -40,7 +35,7 @@ namespace Ecommerce.Application.Carts
             _cartRepo.Add(cart);
             _cartRepo.SaveChanges();
 
-            return cart;
+            return Task.FromResult(cart);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ecommerce.Application.Carts;
 using Ecommerce.Application.Dtos;
 using Mapster;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers
@@ -17,27 +18,17 @@ namespace Ecommerce.API.Controllers
     public class CartsController : ControllerBase
     {
         private readonly ILogger<CartsController> _logger;
-        private readonly CreateCart _createCart;
-        private readonly GetCart _getCart;
-        private readonly AddCartItem _addCartItem;
-        private readonly RemoveCartItem _removeCartItem;
+        private readonly IMediator _mediator;
 
         /// <summary>
         /// Manages cart and cart items.
         /// </summary>
         /// <param name="logger"></param>
-        /// <param name="createCart"></param>
-        /// <param name="getCart"></param>
-        /// <param name="addCartItem"></param>
-        /// <param name="removeCartItem"></param>
-        public CartsController(ILogger<CartsController> logger, CreateCart createCart,
-            GetCart getCart, AddCartItem addCartItem, RemoveCartItem removeCartItem)
+        /// <param name="mediator"></param>
+        public CartsController(ILogger<CartsController> logger, IMediator mediator)
         {
             _logger = logger;
-            _createCart = createCart;
-            _getCart = getCart;
-            _addCartItem = addCartItem;
-            _removeCartItem = removeCartItem;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -46,7 +37,7 @@ namespace Ecommerce.API.Controllers
         /// <param name="createCartRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult CreateCart(CreateCartRequest createCartRequest)
+        public async Task<IActionResult> CreateCart(CreateCartRequest createCartRequest)
         {
             string correlationId = HttpContext.TraceIdentifier;
             using (_logger.BeginScope(new Dictionary<string, object>
@@ -60,7 +51,7 @@ namespace Ecommerce.API.Controllers
 
                     if (createCartRequest.CustomerId <= 0) return BadRequest("Invalid customerId");
 
-                    var cart = _createCart.Execute(createCartRequest.Adapt<CreateCartCommand>());
+                    var cart = await _mediator.Send(createCartRequest.Adapt<CreateCartCommand>());
 
                     _logger.LogInformation("Create cart succeeded");
 
@@ -82,7 +73,7 @@ namespace Ecommerce.API.Controllers
         /// <param name="cartId"></param>
         /// <returns></returns>
         [HttpGet("{cartId}")]
-        public IActionResult GetCart(int cartId)
+        public async Task<IActionResult> GetCart(int cartId)
         {
             string correlationId = HttpContext.TraceIdentifier;
             using (_logger.BeginScope(new Dictionary<string, object>
@@ -94,7 +85,7 @@ namespace Ecommerce.API.Controllers
                 {
                     _logger.LogInformation("GetCart called {cartId}", cartId);
 
-                    var cart = _getCart.Execute(cartId);
+                    var cart = await _mediator.Send(new GetCartCommand(cartId));
 
                     _logger.LogInformation("GetCart succeeded");
 
@@ -116,7 +107,7 @@ namespace Ecommerce.API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("{cartId}/Item")]
-        public IActionResult AddCartItem(int cartId, AddCartItemRequest request)
+        public async Task<IActionResult> AddCartItem(int cartId, AddCartItemRequest request)
         {
             string correlationId = HttpContext.TraceIdentifier;
             using (_logger.BeginScope(new Dictionary<string, object>
@@ -128,7 +119,7 @@ namespace Ecommerce.API.Controllers
                 {
                     _logger.LogInformation("AddCartItem called {cartId}", cartId);
 
-                    var cart = _addCartItem.Execute(request.Adapt<AddCartItemCommand>());
+                    var cart = await _mediator.Send(request.Adapt<AddCartItemCommand>());
 
                     _logger.LogInformation("AddCartItem succeeded");
 
@@ -150,7 +141,7 @@ namespace Ecommerce.API.Controllers
         /// <param name="cartItemId"></param>
         /// <returns></returns>
         [HttpDelete("{cartId}/Item/{cartItemId}")]
-        public IActionResult RemoveCartItem(int cartId, int cartItemId)
+        public async Task<IActionResult> RemoveCartItem(int cartId, int cartItemId)
         {
             string correlationId = HttpContext.TraceIdentifier;
             using (_logger.BeginScope(new Dictionary<string, object>
@@ -163,7 +154,7 @@ namespace Ecommerce.API.Controllers
                     _logger.LogInformation("RemoveCartItem called: Cart: {cartId}, Item: {cartItemId}",
                         cartId, cartItemId);
 
-                    var cart = _removeCartItem.Execute(cartId, cartItemId);
+                    var cart = await _mediator.Send(new RemoveCartItemCommand(cartId, cartItemId));
 
                     _logger.LogInformation("RemoveCartItem succeeded");
 

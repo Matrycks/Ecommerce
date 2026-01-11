@@ -5,24 +5,25 @@ using System.Threading.Tasks;
 using Ecommerce.Application.Dtos;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
+using MediatR;
 
 namespace Ecommerce.Application.Carts
 {
     public record AddCartItemRequest(int CartId, CartItemDto Item);
-    public record AddCartItemCommand(int CartId, CartItem Item);
+    public record AddCartItemCommand(int CartId, CartItem Item) : IRequest<Cart>;
 
-    public class AddCartItem
+    public class AddCartItemHandler : IRequestHandler<AddCartItemCommand, Cart>
     {
         private readonly IRepository<Product> _productRepo;
         private readonly ICartRepository _cartRepo;
 
-        public AddCartItem(IRepository<Product> productRepo, ICartRepository cartRepo)
+        public AddCartItemHandler(IRepository<Product> productRepo, ICartRepository cartRepo)
         {
             _productRepo = productRepo;
             _cartRepo = cartRepo;
         }
 
-        public Cart Execute(AddCartItemCommand request)
+        public Task<Cart> Handle(AddCartItemCommand request, CancellationToken cancellationToken)
         {
             Product product = _productRepo.Get(request.Item.ProductId)
                 ?? throw new Exception($"Item cannot be added, productId:{request.Item.ProductId} doesn't exist");
@@ -32,7 +33,7 @@ namespace Ecommerce.Application.Carts
 
             _cartRepo.SaveChanges();
 
-            return cart;
+            return Task.FromResult(cart);
         }
     }
 }

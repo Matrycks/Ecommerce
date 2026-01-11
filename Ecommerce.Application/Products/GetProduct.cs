@@ -4,23 +4,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
+using MediatR;
 
 namespace Ecommerce.Application.Products
 {
-    public class GetProduct
+    public record GetProductCommand(int ProductId) : IRequest<Product>;
+    public class GetProductHandler : IRequestHandler<GetProductCommand, Product?>
     {
         private readonly IRepository<Product> _products;
 
-        public GetProduct(IRepository<Product> products)
+        public GetProductHandler(IRepository<Product> products)
         {
             _products = products;
         }
 
-        public Product? Execute(int productId)
+        public Task<Product?> Handle(GetProductCommand request, CancellationToken cancellationToken)
         {
-            if (productId <= 0) throw new Exception("ProductId must be greater than zero for product retrieval");
+            if (request.ProductId <= 0) throw new Exception("ProductId must be greater than zero for product retrieval");
 
-            return _products.Get(productId);
+            return Task.FromResult(_products.Get(request.ProductId));
         }
     }
 }

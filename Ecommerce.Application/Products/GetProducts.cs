@@ -4,21 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
+using MediatR;
 
 namespace Ecommerce.Application.Products
 {
-    public class GetProducts
+    public record GetProductsCommand() : IRequest<IEnumerable<Product>>;
+    public class GetProductsHandler : IRequestHandler<GetProductsCommand, IEnumerable<Product>>
     {
         private readonly IRepository<Product> _products;
 
-        public GetProducts(IRepository<Product> products)
+        public GetProductsHandler(IRepository<Product> products)
         {
             _products = products;
         }
 
-        public IEnumerable<Product> Execute()
+        public Task<IEnumerable<Product>> Handle(GetProductsCommand request, CancellationToken cancellationToken)
         {
-            return _products.GetAll();
+            return Task.FromResult(_products.GetAll());
         }
     }
 }
