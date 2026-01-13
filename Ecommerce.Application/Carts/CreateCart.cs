@@ -11,9 +11,9 @@ namespace Ecommerce.Application.Carts
     public class CreateCartHandler : IRequestHandler<CreateCartCommand, Cart>
     {
         private readonly ICartRepository _cartRepo;
-        private readonly IRepository<Product> _productRepo;
+        private readonly IProductRepository _productRepo;
 
-        public CreateCartHandler(IRepository<Product> productRepo, ICartRepository cartRepo)
+        public CreateCartHandler(IProductRepository productRepo, ICartRepository cartRepo)
         {
             _productRepo = productRepo;
             _cartRepo = cartRepo;

@@ -12,9 +12,9 @@ namespace Ecommerce.Application.Products
     public record SearchProductsCommand(Expression<Func<Product, bool>> Query) : IRequest<IQueryable<Product>>;
     public class SearchProductsHandler : IRequestHandler<SearchProductsCommand, IQueryable<Product>>
     {
-        private readonly IRepository<Product> _products;
+        private readonly IProductRepository _products;
 
-        public SearchProductsHandler(IRepository<Product> products)
+        public SearchProductsHandler(IProductRepository products)
         {
             _products = products;
         }

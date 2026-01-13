@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Ecommerce.Domain.Interfaces;
 
 namespace Ecommerce.Domain.Entities
 {
-    public class Customer : ICustomer
+    public class Customer
     {
         public int CustomerId { get; set; }
         public string FirstName { get; private set; } = null!;

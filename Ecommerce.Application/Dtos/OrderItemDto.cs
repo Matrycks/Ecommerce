@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Ecommerce.Domain.Interfaces;
 
 namespace Ecommerce.Application.Dtos
 {
-    public class OrderItemDto : IOrderItem
+    public class OrderItemDto
     {
         public int OrderItemId { get; set; }
         public int ProductId { get; set; }
