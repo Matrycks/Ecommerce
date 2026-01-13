@@ -25,6 +25,13 @@ namespace Ecommerce.Infrastructure.Repositories
             return entity;
         }
 
+        public void Delete(int entityId)
+        {
+            var cart = _dbContext.Carts.Find(entityId);
+            if (cart != null)
+                _dbContext.Carts.Remove(cart);
+        }
+
         public Cart? Get(int entityId)
         {
             var cart = _dbContext.Carts.Include(x => x.Items).SingleOrDefault(x => x.CartId == entityId);

@@ -14,10 +14,10 @@ namespace Ecommerce.Application.Carts
 
     public class AddCartItemHandler : IRequestHandler<AddCartItemCommand, Cart>
     {
-        private readonly IRepository<Product> _productRepo;
+        private readonly IProductRepository _productRepo;
         private readonly ICartRepository _cartRepo;
 
-        public AddCartItemHandler(IRepository<Product> productRepo, ICartRepository cartRepo)
+        public AddCartItemHandler(IProductRepository productRepo, ICartRepository cartRepo)
         {
             _productRepo = productRepo;
             _cartRepo = cartRepo;

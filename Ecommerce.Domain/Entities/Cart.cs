@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Ecommerce.Domain.Entities.Base;
-using Ecommerce.Domain.Interfaces;
 
 namespace Ecommerce.Domain.Entities
 {
@@ -72,20 +66,6 @@ namespace Ecommerce.Domain.Entities
             Items.Clear();
 
             SetTotal();
-        }
-
-        public IOrder CreateOrder(Guid orderNumber)
-        {
-            var orderItems = Items.Select(x => new OrderItem
-            {
-                ProductId = x.ProductId,
-                Cost = x.Cost,
-                Total = x.Total,
-                Quantity = x.Quantity
-            }).ToList<IOrderItem>();
-
-            Order order = new Order(CustomerId, orderNumber, orderItems);
-            return order;
         }
     }
 }

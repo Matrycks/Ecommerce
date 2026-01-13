@@ -13,6 +13,7 @@ namespace Ecommerce.Application.Interfaces
         public T? Get(int entityId);
         public T Add(T entity);
         public IQueryable<T> Query(Expression<Func<T, bool>> predicate);
+        public void Delete(int entityId);
         public void SaveChanges();
     }
 }

@@ -11,9 +11,9 @@ namespace Ecommerce.Application.Products
     public record GetProductCommand(int ProductId) : IRequest<Product>;
     public class GetProductHandler : IRequestHandler<GetProductCommand, Product?>
     {
-        private readonly IRepository<Product> _products;
+        private readonly IProductRepository _products;
 
-        public GetProductHandler(IRepository<Product> products)
+        public GetProductHandler(IProductRepository products)
         {
             _products = products;
         }

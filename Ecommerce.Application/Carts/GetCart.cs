@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
-using Ecommerce.Domain.Interfaces;
 using MediatR;
 
 namespace Ecommerce.Application.Carts
 {
     public record GetCartCommand(int cartId) : IRequest<Cart>;
 
-    public class GetCartHandler : IRequestHandler<GetCartCommand, Cart>
+    public class GetCartHandler : IRequestHandler<GetCartCommand, Cart?>
     {
         private readonly ICartRepository _cartRepo;
 
@@ -20,9 +15,9 @@ namespace Ecommerce.Application.Carts
             _cartRepo = cartRepo;
         }
 
-        public Task<Cart> Handle(GetCartCommand request, CancellationToken cancellationToken)
+        public Task<Cart?> Handle(GetCartCommand request, CancellationToken cancellationToken)
         {
-            var cart = _cartRepo.Get(request.cartId) ?? throw new Exception("Cart not found");
+            var cart = _cartRepo.Get(request.cartId) ?? null;
             return Task.FromResult(cart);
         }
     }

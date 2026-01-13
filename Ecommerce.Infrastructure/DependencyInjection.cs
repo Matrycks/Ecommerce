@@ -6,6 +6,7 @@ using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
 using Ecommerce.Infrastructure.DatabaseContext;
 using Ecommerce.Infrastructure.Repositories;
+using Ecommerce.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,8 +25,12 @@ namespace Ecommerce.Infrastructure
             else
                 services.AddDbContext<EcommerceDbContext>(options => options.UseSqlServer(connectionName));
 
-            services.AddScoped<IRepository<Product>, ProductRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IPaymentCardRepository, PaymentCardRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPaymentService, FakePaymentService>();
 
             return services;
         }

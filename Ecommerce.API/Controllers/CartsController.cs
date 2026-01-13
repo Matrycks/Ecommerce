@@ -86,6 +86,7 @@ namespace Ecommerce.API.Controllers
                     _logger.LogInformation("GetCart called {cartId}", cartId);
 
                     var cart = await _mediator.Send(new GetCartCommand(cartId));
+                    if (cart == null) return NoContent();
 
                     _logger.LogInformation("GetCart succeeded");
 
@@ -165,6 +166,40 @@ namespace Ecommerce.API.Controllers
                     _logger.LogError(ex.Message, ex);
 
                     return BadRequest("Error removing item");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles cart checkout.
+        /// </summary>
+        /// <param name="cartId"></param>
+        /// <param name="checkoutCommand"></param>
+        /// <returns></returns>
+        [HttpPost("{cartId}/checkout")]
+        public async Task<IActionResult> Checkout(int cartId, [FromBody] CheckoutCommand checkoutCommand)
+        {
+            string correlationId = HttpContext.TraceIdentifier;
+            using (_logger.BeginScope(new Dictionary<string, object>
+            {
+
+            }))
+            {
+                try
+                {
+                    _logger.LogInformation("Checkout called CartId: {cartId}", cartId);
+
+                    var order = await _mediator.Send(checkoutCommand);
+
+                    _logger.LogInformation("Checkout succeeded");
+
+                    return Ok(order.Adapt<OrderDto>());
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message, ex);
+
+                    return BadRequest("Error on cart checkout");
                 }
             }
         }

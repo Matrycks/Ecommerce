@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Ecommerce.Domain.Interfaces;
 
 namespace Ecommerce.Application.Dtos
 {
-    public class CustomerDto : ICustomer
+    public class CustomerDto
     {
         public int CustomerId { get; set; }
         public string FirstName { get; set; } = null!;

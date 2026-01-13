@@ -50,6 +50,7 @@ if (app.Environment.IsDevelopment())
 if (useInMemory)
 {
     ProductsInitializer.Seed(app.Services);
+    PaymentCardInitializer.Seed(app.Services);
 }
 
 app.UseHttpsRedirection();
