@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Ecommerce.Infrastructure.Repositories
 {
-    public class ProductRepository : IRepository<Product>
+    public class ProductRepository : IProductRepository
     {
         private readonly EcommerceDbContext _dbContext;
 
@@ -46,6 +46,13 @@ namespace Ecommerce.Infrastructure.Repositories
         public void SaveChanges()
         {
             _dbContext.SaveChanges();
+        }
+
+        public void Delete(int entityId)
+        {
+            var entity = _dbContext.Products.Find(entityId);
+            if (entity != null)
+                _dbContext.Products.Remove(entity);
         }
     }
 }

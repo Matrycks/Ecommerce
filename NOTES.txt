@@ -1,0 +1,5 @@
+TODO:
+- Make repos async
+- Implement Unit of Work
+- Remove IQueryable from repos
+- Handle validation (FluentAPI)

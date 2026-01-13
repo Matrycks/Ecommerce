@@ -9,4 +9,10 @@ namespace Ecommerce.Domain
         Shipped,
         Delivered
     }
+
+    public enum CardType
+    {
+        Debit,
+        Credit
+    }
 }

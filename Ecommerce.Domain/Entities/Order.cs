@@ -1,32 +1,33 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Ecommerce.Domain.Interfaces;
 
 namespace Ecommerce.Domain.Entities
 {
-    public class Order : IOrder
+    public class Order
     {
         public int OrderId { get; set; }
         public int CustomerId { get; set; }
+        public int? CartId { get; set; }
         public Guid OrderNumber { get; set; }
-        public ICollection<IOrderItem> Items { get; set; } = null!;
+        public ICollection<OrderItem> Items { get; set; } = null!;
         public bool IsPaid { get; set; }
         public decimal Total { get; private set; }
         public OrderStatus Status { get; private set; }
         public DateTime CreatedDate { get; set; }
 
-        public Order(int customerId, Guid orderNumber, ICollection<IOrderItem> orderItems)
+        public Order() { }
+        public Order(int customerId, Guid orderNumber, IEnumerable<OrderItem> orderItems)
         {
             if (customerId <= 0) throw new Exception("Invalid customerId");
-            if (orderItems.Count <= 0) throw new Exception("Orders cannot be created without items");
+            if (!orderItems.Any()) throw new Exception("Orders cannot be created without items");
 
+            //CartId = cartId;
             CustomerId = customerId;
             OrderNumber = orderNumber;
             CreatedDate = DateTime.Now.ToUniversalTime();
-            Items = orderItems;
+            Items = [.. orderItems];
+
+            SetStatus(OrderStatus.Pending);
+
+            SetTotal();
         }
 
         public void SetStatus(OrderStatus newStatus)
@@ -44,6 +45,26 @@ namespace Ecommerce.Domain.Entities
                 throw new Exception("Order delivered and cannot be cancelled");
 
             Status = OrderStatus.Cancelled;
+        }
+
+        private void SetTotal()
+        {
+            decimal nTotal = Items.Sum(x => x.Total);
+            Total = nTotal;
+        }
+
+        public static Order Create(Guid orderNumber, Cart cart)
+        {
+            var orderItems = cart.Items.Select(x => new OrderItem
+            {
+                ProductId = x.ProductId,
+                Cost = x.Cost,
+                Total = x.Total,
+                Quantity = x.Quantity
+            });
+
+            Order order = new(cart.CustomerId, orderNumber, orderItems);
+            return order;
         }
     }
 }

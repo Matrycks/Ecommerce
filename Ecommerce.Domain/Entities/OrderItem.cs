@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Ecommerce.Domain.Interfaces;
 
 namespace Ecommerce.Domain.Entities
 {
-    public class OrderItem : IOrderItem
+    public class OrderItem
     {
         public int OrderItemId { get; set; }
         public int OrderId { get; set; }
@@ -27,7 +21,7 @@ namespace Ecommerce.Domain.Entities
             Quantity = quantity;
         }
 
-        public OrderItem(ICartItem cartItem)
+        public OrderItem(CartItem cartItem)
         {
             ProductId = cartItem.ProductId;
             Quantity = cartItem.Quantity;
