@@ -26,9 +26,9 @@ namespace Ecommerce.Application.Carts
         public Task<Cart> Handle(AddCartItemCommand request, CancellationToken cancellationToken)
         {
             Product product = _productRepo.Get(request.Item.ProductId)
-                ?? throw new Exception($"Item cannot be added, productId:{request.Item.ProductId} doesn't exist");
+                ?? throw new KeyNotFoundException($"Item cannot be added, productId:{request.Item.ProductId} doesn't exist");
 
-            var cart = _cartRepo.Get(request.CartId) ?? throw new Exception("No cart exist");
+            var cart = _cartRepo.Get(request.CartId) ?? throw new KeyNotFoundException("No cart exist");
             cart.AddItem(new CartItem(product, request.Item.Quantity));
 
             _cartRepo.SaveChanges();

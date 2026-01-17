@@ -18,7 +18,7 @@ namespace Ecommerce.Domain.Entities
             if (string.IsNullOrEmpty(firstname) ||
                 string.IsNullOrEmpty(lastname) ||
                 string.IsNullOrEmpty(email))
-                throw new Exception("Invalid params creating customer");
+                throw new ArgumentException("Invalid params creating customer");
 
             FirstName = firstname;
             LastName = lastname;
@@ -29,7 +29,7 @@ namespace Ecommerce.Domain.Entities
 
         public void SetPassword(string newPassword)
         {
-            if (string.IsNullOrEmpty(newPassword)) throw new Exception("Password cannot be null");
+            if (string.IsNullOrEmpty(newPassword)) throw new ArgumentException("Password cannot be null");
 
             //TODO: make sure new password doesn't match existing
 

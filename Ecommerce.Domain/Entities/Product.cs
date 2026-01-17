@@ -12,7 +12,7 @@ namespace Ecommerce.Domain.Entities
 
         public Product(string name, string? desc, decimal price)
         {
-            if (string.IsNullOrEmpty(name) || price <= 0) throw new Exception("Invalid params for creating product");
+            if (string.IsNullOrEmpty(name) || price <= 0) throw new ArgumentException("Invalid params for creating product");
 
             Name = name;
             Desc = desc;
@@ -21,7 +21,7 @@ namespace Ecommerce.Domain.Entities
 
         public void SetPrice(decimal newPrice)
         {
-            if (newPrice <= 0) throw new Exception("Product pricing must be greater than 0");
+            if (newPrice <= 0) throw new ArgumentException("Product pricing must be greater than 0");
             Price = newPrice;
         }
     }

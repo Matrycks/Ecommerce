@@ -14,7 +14,7 @@ namespace Ecommerce.Domain.Entities
 
         public Cart(int customerId, ICollection<CartItem> items)
         {
-            if (customerId <= 0) throw new Exception("CustomerId must be greater than 0");
+            if (customerId <= 0) throw new ArgumentException("CustomerId must be greater than 0");
 
             CustomerId = customerId;
             Items = items;
@@ -54,8 +54,8 @@ namespace Ecommerce.Domain.Entities
 
         public void UpdateOrderItemQuantity(int productId, int quantity)
         {
-            CartItem? cartItem = (CartItem?)Items.SingleOrDefault(x => x.ProductId == productId)
-                ?? throw new Exception("No item found with productId");
+            CartItem cartItem = (CartItem?)Items.SingleOrDefault(x => x.ProductId == productId)
+                ?? throw new KeyNotFoundException("No item found with productId");
             cartItem.UpdateQuantity(quantity);
 
             SetTotal();

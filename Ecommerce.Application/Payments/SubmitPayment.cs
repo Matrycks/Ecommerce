@@ -29,7 +29,7 @@ namespace Ecommerce.Application.Payments
         public async Task<bool> Handle(SubmitPaymentCommand request, CancellationToken cancellationToken)
         {
             var order = request.Order;
-            var paymentCard = _paymentCardRepository.Get(request.PaymentCardId) ?? throw new Exception("Payment failed, no associated payment card");
+            var paymentCard = _paymentCardRepository.Get(request.PaymentCardId) ?? throw new KeyNotFoundException("Payment failed, no associated payment card");
 
             SubmitPaymentResponse resp = await _paymentService.Execute(order.Total, paymentCard);
             if (!resp.IsSuccess)

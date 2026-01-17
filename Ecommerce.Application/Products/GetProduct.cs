@@ -20,7 +20,7 @@ namespace Ecommerce.Application.Products
 
         public Task<Product?> Handle(GetProductCommand request, CancellationToken cancellationToken)
         {
-            if (request.ProductId <= 0) throw new Exception("ProductId must be greater than zero for product retrieval");
+            if (request.ProductId <= 0) throw new ArgumentException("ProductId must be greater than zero for product retrieval");
 
             return Task.FromResult(_products.Get(request.ProductId));
         }
