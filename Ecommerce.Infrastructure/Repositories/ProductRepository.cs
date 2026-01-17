@@ -37,7 +37,7 @@ namespace Ecommerce.Infrastructure.Repositories
             return products;
         }
 
-        public IQueryable<Product> Query(Expression<Func<Product, bool>> predicate)
+        public IEnumerable<Product> Query(Expression<Func<Product, bool>> predicate)
         {
             var products = _dbContext.Products.Where(predicate);
             return products;

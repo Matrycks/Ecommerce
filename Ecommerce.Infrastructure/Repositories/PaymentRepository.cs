@@ -48,7 +48,7 @@ namespace Ecommerce.Infrastructure.Repositories
             return payment;
         }
 
-        public IQueryable<Payment> Query(Expression<Func<Payment, bool>> predicate)
+        public IEnumerable<Payment> Query(Expression<Func<Payment, bool>> predicate)
         {
             throw new NotImplementedException();
         }

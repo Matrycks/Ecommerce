@@ -53,7 +53,7 @@ namespace Ecommerce.Infrastructure.Repositories
             return [.. _dbContext.CartItems.Where(x => x.CartId == cartId)];
         }
 
-        public IQueryable<Cart> Query(Expression<Func<Cart, bool>> predicate)
+        public IEnumerable<Cart> Query(Expression<Func<Cart, bool>> predicate)
         {
             throw new NotImplementedException();
         }

@@ -48,7 +48,7 @@ namespace Ecommerce.Infrastructure.Repositories
             return orders;
         }
 
-        public IQueryable<Order> Query(Expression<Func<Order, bool>> predicate)
+        public IEnumerable<Order> Query(Expression<Func<Order, bool>> predicate)
         {
             return _dbContext.Orders.Where(predicate);
         }

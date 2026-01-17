@@ -47,7 +47,7 @@ namespace Ecommerce.Infrastructure.Repositories
             return [.. _dbContext.PaymentCards.Where(c => c.CustomerId == customerId)];
         }
 
-        public IQueryable<PaymentCard> Query(Expression<Func<PaymentCard, bool>> predicate)
+        public IEnumerable<PaymentCard> Query(Expression<Func<PaymentCard, bool>> predicate)
         {
             throw new NotImplementedException();
         }

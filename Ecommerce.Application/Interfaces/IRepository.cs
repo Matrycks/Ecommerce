@@ -12,7 +12,7 @@ namespace Ecommerce.Application.Interfaces
         public IEnumerable<T> GetAll();
         public T? Get(int entityId);
         public T Add(T entity);
-        public IQueryable<T> Query(Expression<Func<T, bool>> predicate);
+        public IEnumerable<T> Query(Expression<Func<T, bool>> predicate);
         public void Delete(int entityId);
         public void SaveChanges();
     }

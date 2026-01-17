@@ -10,7 +10,7 @@ using MediatR;
 namespace Ecommerce.Application.Products
 {
     public record SearchProductsCommand(Expression<Func<Product, bool>> Query) : IRequest<IQueryable<Product>>;
-    public class SearchProductsHandler : IRequestHandler<SearchProductsCommand, IQueryable<Product>>
+    public class SearchProductsHandler : IRequestHandler<SearchProductsCommand, IEnumerable<Product>>
     {
         private readonly IProductRepository _products;
 
@@ -19,12 +19,12 @@ namespace Ecommerce.Application.Products
             _products = products;
         }
 
-        public IQueryable<Product> Execute(Expression<Func<Product, bool>> predicate)
+        public IEnumerable<Product> Execute(Expression<Func<Product, bool>> predicate)
         {
             return _products.Query(predicate);
         }
 
-        public Task<IQueryable<Product>> Handle(SearchProductsCommand request, CancellationToken cancellationToken)
+        public Task<IEnumerable<Product>> Handle(SearchProductsCommand request, CancellationToken cancellationToken)
         {
             return Task.FromResult(_products.Query(request.Query));
         }
