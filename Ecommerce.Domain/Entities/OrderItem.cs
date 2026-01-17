@@ -15,7 +15,7 @@ namespace Ecommerce.Domain.Entities
         public OrderItem(int productId, int quantity)
         {
             if (quantity <= 0)
-                throw new Exception("Quantity must be greater than zero");
+                throw new ArgumentException("Quantity must be greater than zero");
 
             ProductId = productId;
             Quantity = quantity;

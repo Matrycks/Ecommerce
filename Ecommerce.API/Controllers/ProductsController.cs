@@ -38,29 +38,9 @@ namespace Ecommerce.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
-            var correlationId = HttpContext.TraceIdentifier;
-            using (_logger.BeginScope(new Dictionary<string, object>
-            {
-                ["CorrelationId"] = correlationId
-            }))
-            {
-                try
-                {
-                    _logger.LogInformation("GetProducts request received");
+            var products = await _mediator.Send(new GetProductsCommand());
 
-                    var products = await _mediator.Send(new GetProductsCommand());
-
-                    _logger.LogInformation("GetProducts succeeded");
-
-                    return Ok(products.Adapt<List<ProductDto>>());
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Retrieving products failed");
-
-                    return BadRequest("Retrieving products failed");
-                }
-            }
+            return Ok(products.Adapt<List<ProductDto>>());
         }
 
     }

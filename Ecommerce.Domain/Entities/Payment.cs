@@ -33,7 +33,7 @@ namespace Ecommerce.Domain.Entities
             decimal amount, Guid confirmationNumber)
         {
             if (customerId <= 0 || orderId <= 0 || paymentCardId <= 0 || amount <= 0)
-                throw new Exception("Invalid params creating payment");
+                throw new ArgumentException("Invalid params creating payment");
 
             CustomerId = customerId;
             OrderId = orderId;

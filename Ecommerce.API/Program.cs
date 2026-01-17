@@ -1,4 +1,5 @@
 using System.Reflection;
+using Ecommerce.API.Middleware;
 using Ecommerce.Application;
 using Ecommerce.Infrastructure;
 using Ecommerce.Infrastructure.DbInitializer;
@@ -52,6 +53,8 @@ if (useInMemory)
     ProductsInitializer.Seed(app.Services);
     PaymentCardInitializer.Seed(app.Services);
 }
+
+app.UseMiddleware<ExceptionHandler>();
 
 app.UseHttpsRedirection();
 

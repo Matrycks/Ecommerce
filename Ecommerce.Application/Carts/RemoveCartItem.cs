@@ -20,15 +20,15 @@ namespace Ecommerce.Application.Carts
 
         public Task<Cart> Handle(RemoveCartItemCommand request, CancellationToken cancellationToken)
         {
-            var cart = _cartRepo.Get(request.CartId) ?? throw new Exception("Cannot remove item, cart doesn't exist");
+            var cart = _cartRepo.Get(request.CartId)
+                ?? throw new KeyNotFoundException($"Cannot remove item, cart: {request.CartId} doesn't exist");
 
-            var cartItem = _cartRepo.GetCartItem(request.CartItemId);
-            if (cartItem != null)
-            {
-                cart.RemoveItem(cartItem);
+            var cartItem = _cartRepo.GetCartItem(request.CartItemId)
+                ?? throw new KeyNotFoundException($"CartItem: {request.CartItemId} doesn't exist");
 
-                _cartRepo.SaveChanges();
-            }
+            cart.RemoveItem(cartItem);
+
+            _cartRepo.SaveChanges();
 
             return Task.FromResult(cart);
         }

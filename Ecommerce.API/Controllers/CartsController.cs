@@ -39,31 +39,11 @@ namespace Ecommerce.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCart(CreateCartRequest createCartRequest)
         {
-            string correlationId = HttpContext.TraceIdentifier;
-            using (_logger.BeginScope(new Dictionary<string, object>
-            {
-                ["CorrelationId"] = correlationId
-            }))
-            {
-                try
-                {
-                    _logger.LogInformation("Create cart called");
+            if (createCartRequest.CustomerId <= 0) return BadRequest("Invalid customerId");
 
-                    if (createCartRequest.CustomerId <= 0) return BadRequest("Invalid customerId");
+            var cart = await _mediator.Send(createCartRequest.Adapt<CreateCartCommand>());
 
-                    var cart = await _mediator.Send(createCartRequest.Adapt<CreateCartCommand>());
-
-                    _logger.LogInformation("Create cart succeeded");
-
-                    return Ok(cart.Adapt<CartDto>());
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message, ex);
-
-                    return BadRequest("Error creating cart");
-                }
-            }
+            return Ok(cart.Adapt<CartDto>());
         }
 
 
@@ -75,30 +55,9 @@ namespace Ecommerce.API.Controllers
         [HttpGet("{cartId}")]
         public async Task<IActionResult> GetCart(int cartId)
         {
-            string correlationId = HttpContext.TraceIdentifier;
-            using (_logger.BeginScope(new Dictionary<string, object>
-            {
-                ["CorrelationId"] = correlationId
-            }))
-            {
-                try
-                {
-                    _logger.LogInformation("GetCart called {cartId}", cartId);
+            var cart = await _mediator.Send(new GetCartCommand(cartId));
 
-                    var cart = await _mediator.Send(new GetCartCommand(cartId));
-                    if (cart == null) return NoContent();
-
-                    _logger.LogInformation("GetCart succeeded");
-
-                    return Ok(cart.Adapt<CartDto>());
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message, ex);
-
-                    return BadRequest("Error retrieving cart");
-                }
-            }
+            return Ok(cart.Adapt<CartDto>());
         }
 
         /// <summary>
@@ -110,29 +69,9 @@ namespace Ecommerce.API.Controllers
         [HttpPost("{cartId}/Item")]
         public async Task<IActionResult> AddCartItem(int cartId, AddCartItemRequest request)
         {
-            string correlationId = HttpContext.TraceIdentifier;
-            using (_logger.BeginScope(new Dictionary<string, object>
-            {
-                ["CorrelationId"] = correlationId
-            }))
-            {
-                try
-                {
-                    _logger.LogInformation("AddCartItem called {cartId}", cartId);
+            var cart = await _mediator.Send(request.Adapt<AddCartItemCommand>());
 
-                    var cart = await _mediator.Send(request.Adapt<AddCartItemCommand>());
-
-                    _logger.LogInformation("AddCartItem succeeded");
-
-                    return Ok(cart.Adapt<CartDto>());
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message, ex);
-
-                    return BadRequest("Error adding cart item");
-                }
-            }
+            return Ok(cart.Adapt<CartDto>());
         }
 
         /// <summary>
@@ -144,30 +83,9 @@ namespace Ecommerce.API.Controllers
         [HttpDelete("{cartId}/Item/{cartItemId}")]
         public async Task<IActionResult> RemoveCartItem(int cartId, int cartItemId)
         {
-            string correlationId = HttpContext.TraceIdentifier;
-            using (_logger.BeginScope(new Dictionary<string, object>
-            {
-                ["CorrelationId"] = correlationId
-            }))
-            {
-                try
-                {
-                    _logger.LogInformation("RemoveCartItem called: Cart: {cartId}, Item: {cartItemId}",
-                        cartId, cartItemId);
+            var cart = await _mediator.Send(new RemoveCartItemCommand(cartId, cartItemId));
 
-                    var cart = await _mediator.Send(new RemoveCartItemCommand(cartId, cartItemId));
-
-                    _logger.LogInformation("RemoveCartItem succeeded");
-
-                    return Ok(cart.Adapt<CartDto>());
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message, ex);
-
-                    return BadRequest("Error removing item");
-                }
-            }
+            return Ok(cart.Adapt<CartDto>());
         }
 
         /// <summary>
@@ -179,29 +97,9 @@ namespace Ecommerce.API.Controllers
         [HttpPost("{cartId}/checkout")]
         public async Task<IActionResult> Checkout(int cartId, [FromBody] CheckoutCommand checkoutCommand)
         {
-            string correlationId = HttpContext.TraceIdentifier;
-            using (_logger.BeginScope(new Dictionary<string, object>
-            {
+            var order = await _mediator.Send(checkoutCommand);
 
-            }))
-            {
-                try
-                {
-                    _logger.LogInformation("Checkout called CartId: {cartId}", cartId);
-
-                    var order = await _mediator.Send(checkoutCommand);
-
-                    _logger.LogInformation("Checkout succeeded");
-
-                    return Ok(order.Adapt<OrderDto>());
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message, ex);
-
-                    return BadRequest("Error on cart checkout");
-                }
-            }
+            return Ok(order.Adapt<OrderDto>());
         }
     }
 }

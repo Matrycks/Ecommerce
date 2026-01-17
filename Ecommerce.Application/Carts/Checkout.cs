@@ -26,7 +26,7 @@ namespace Ecommerce.Application.Carts
 
         public async Task<Order> Handle(CheckoutCommand request, CancellationToken cancellationToken)
         {
-            var cart = _cartRepo.Get(request.CartId) ?? throw new Exception("No cart available for checkout");
+            var cart = _cartRepo.Get(request.CartId) ?? throw new KeyNotFoundException("No cart available for checkout");
 
             var order = Order.Create(Guid.NewGuid(), cart);
 

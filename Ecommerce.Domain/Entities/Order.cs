@@ -16,7 +16,7 @@ namespace Ecommerce.Domain.Entities
         public Order() { }
         public Order(int customerId, Guid orderNumber, IEnumerable<OrderItem> orderItems)
         {
-            if (customerId <= 0) throw new Exception("Invalid customerId");
+            if (customerId <= 0) throw new ArgumentException("Invalid customerId");
             if (!orderItems.Any()) throw new Exception("Orders cannot be created without items");
 
             //CartId = cartId;
